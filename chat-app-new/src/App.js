@@ -3,10 +3,12 @@ import "./App.css";
 import Sidebar from "./Sidebar";
 import Chat from "./Chat.js";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
 import Login from "./Login";
 
 function App() {
-  const [user, setUser] = useState();
+  const [{ user }, dispatch] = useStateValue();
+
   return (
     <div className="App">
       {!user ? (
@@ -16,7 +18,7 @@ function App() {
           <BrowserRouter>
             <Sidebar />
             <Routes>
-              <Route path="/rooms/:roomId" element={<Chat />} />
+              {/* <Route path="/rooms/:roomId" element={<Chat />} /> */}
               <Route path="/" element={<Chat />} />
             </Routes>
           </BrowserRouter>
