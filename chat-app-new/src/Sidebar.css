@@ -50,4 +50,5 @@
     flex: 1;
     background-color: rgb(255, 255, 255);
     overflow-y: scroll hidden;
+    max-height:66.3vh; overflow-y:auto;
 }

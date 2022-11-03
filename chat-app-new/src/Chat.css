@@ -98,7 +98,7 @@
     color: rgb(143, 143, 143);
 }
 .chat-body{
-    max-height:500px; overflow-y:auto;
+    max-height:67vh; overflow-y:auto;
 }
 
 
