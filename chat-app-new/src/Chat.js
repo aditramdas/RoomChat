@@ -8,13 +8,18 @@ import MicIcon from "@material-ui/icons/Mic";
 import InsetEmoticonIcon from "@material-ui/icons/InsertEmoticon";
 import { useParams } from "react-router-dom";
 import db from "./firebase";
+import firebase from "firebase/compat/app";
+import "firebase/compat/auth";
+import "firebase/compat/firestore";
+import { useStateValue } from "./StateProvider";
 
 function Chat() {
   const [input, setInput] = useState("");
   const [photo, setphoto] = useState("");
-  const [messages, setMessages] = useState();
+  const [messages, setMessages] = useState([]);
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState();
+  const [{ user }, dispatch] = useStateValue();
   useEffect(() => {
     if (roomId) {
       console.log("Change");
@@ -36,6 +41,11 @@ function Chat() {
   const sendMessage = (e) => {
     e.preventDefault();
     console.log("You typed a message");
+    db.collection("rooms").doc(roomId).collection("messages").add({
+      message: input,
+      name: user.displayName,
+      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    });
     setInput("");
   };
   return (
@@ -46,7 +56,12 @@ function Chat() {
         />
         <div className="chat-headerInfo">
           <h2>{roomName}</h2>
-          <p>Last Seen</p>
+          <p>
+            last seen{" "}
+            {new Date(
+              messages[messages.length - 1]?.timestamp?.toDate()
+            ).toUTCString()}
+          </p>
         </div>
         <div className="chat-headerRight">
           <IconButton>
@@ -62,18 +77,18 @@ function Chat() {
       </div>
       <div className="chat-body">
         {messages.map((message) => (
-          <p className="chat-message chatReceiver">
+          <p className={`chat-message ${message.name === user.displayName && "chatReceiver"}`}>
             <span className="sender">{message.name}</span>
             {message.message}
             <span className="timestamp">
-              {new Date(message.timestamp?.toDate()).toUTCString}
+              {new Date(message.timestamp?.toDate()).toUTCString()}
             </span>
           </p>
         ))}
       </div>
       <div className="chat-footer">
         <InsetEmoticonIcon />
-        <form>
+        <form onSubmit={sendMessage}>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}

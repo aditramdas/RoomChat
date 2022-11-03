@@ -14,7 +14,7 @@ function App() {
       {!user ? (
         <Login />
       ) : (
-        <div className="app-body">
+        <div className="app-body" >
           <BrowserRouter>
             <Sidebar />
             <Routes>
