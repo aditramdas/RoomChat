@@ -12,6 +12,10 @@ import { useStateValue } from "./StateProvider";
 function Sidebar() {
   const [{ user }, dispatch] = useStateValue();
   const [rooms, setRooms] = useState([]);
+  function popup() {
+    var popup = document.getElementById("myPopup");
+    popup.classList.toggle("show");
+  }
   useEffect(() => {
     const unsubscribe = db.collection("rooms").onSnapshot((snapshot) =>
       setRooms(
@@ -30,7 +34,8 @@ function Sidebar() {
       <div className="sidebar_header">
         <Avatar src={user?.photoURL} />
 
-        <div className="sidebar-header-right">
+        <div className="sidebar-header-right" onclick={popup}>
+          <span class="popuptext" id="myPopup">Popup text...</span>
           <IconButton>
             <DonutLargeIcon />
           </IconButton>

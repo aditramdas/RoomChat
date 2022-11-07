@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect,useRef , useState } from "react";
 import "./Chat.css";
 import { Avatar, IconButton } from "@material-ui/core";
 import { SearchOutlined } from "@material-ui/icons";
@@ -20,6 +20,11 @@ function Chat() {
   const { roomId } = useParams();
   const [roomName, setRoomName] = useState();
   const [{ user }, dispatch] = useStateValue();
+  const bottomRef = useRef(null);
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({behavior: 'smooth'});
+  }, [messages]);
+  
   useEffect(() => {
     if (roomId) {
       console.log("Change");
@@ -85,6 +90,7 @@ function Chat() {
             </span>
           </p>
         ))}
+        <div ref={bottomRef} />
       </div>
       <div className="chat-footer">
         <InsetEmoticonIcon />
